@@ -7,11 +7,10 @@ import annotations.parameter_annotations as params
 @parameter(name="image_name", datatype="str", required=False, defaultValue='SAR')
 def inject_variables():
     print("Variables have been injected into the scope of this file")
-    pass
 
 
 if __name__ == '__main__':
     inject_variables()
-    print("Width = {} with type {}".format(params.width, type(params.width)))
-    print("Height = {} with type {}".format(params.height, type(params.height)))
-    print("Image Name = {} with type {}".format(params.image_name, type(params.image_name)))
+    print(f"Width = {params.width} with type {type(params.width)}")
+    print(f"Height = {params.height} with type {type(params.height)}")
+    print(f"Image Name = {params.image_name} with type {type(params.image_name)}")

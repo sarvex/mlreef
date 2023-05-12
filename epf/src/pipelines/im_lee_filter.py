@@ -29,8 +29,7 @@ class LeeFilter:
         img_variance = img_sqr_mean - img_mean ** 2
         overall_variance = variance(img)
         img_weights = img_variance / (img_variance + overall_variance)
-        img_output = img_mean + img_weights * (img - img_mean)
-        return img_output
+        return img_mean + img_weights * (img - img_mean)
 
     def __execute__(self):
         # Walk the directories to find images
@@ -44,7 +43,12 @@ class LeeFilter:
                     relative_p = os.path.relpath(fullpath, self.input_dir)
                     folders = os.path.split(relative_p)[0]
                     Path(os.path.join(self.output_dir, folders)).mkdir(parents=True, exist_ok=True)
-                    cv2.imwrite(os.path.join(self.output_dir, '{}_fltrd{}'.format(relative_p, extension)), image_despeckeled)
+                    cv2.imwrite(
+                        os.path.join(
+                            self.output_dir, f'{relative_p}_fltrd{extension}'
+                        ),
+                        image_despeckeled,
+                    )
         print("Filtering done")
         return 1
 

@@ -40,7 +40,7 @@ class MyScatterPlot:
                     relative_p = os.path.relpath(fullpath, self.input_dir)
                     folders = os.path.split(relative_p)[0]
                     Path(os.path.join(self.output_dir, folders)).mkdir(parents=True, exist_ok=True)
-                    fig.savefig(os.path.join(self.output_dir, '{}_scatterPlot{}'.format(relative_p, '.png')))
+                    fig.savefig(os.path.join(self.output_dir, f'{relative_p}_scatterPlot.png'))
         print("scatterPlot done")
         return 1
 

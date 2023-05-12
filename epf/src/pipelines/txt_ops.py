@@ -62,8 +62,7 @@ class TextPreparation:
                 filtered_tokens.append(token)
 
         if self.stemmed:
-            stems = [self.stemmer.stem(t) for t in filtered_tokens]
-            return stems
+            return [self.stemmer.stem(t) for t in filtered_tokens]
         else:
             return filtered_tokens
 
@@ -92,7 +91,7 @@ class TextPreparation:
     # create our training data
     def __execute__(self):
         words = self.getWordList()
-        with open(self.output_dir + '/wordlist.txt', 'w') as fp:
+        with open(f'{self.output_dir}/wordlist.txt', 'w') as fp:
             fp.write("\n".join(words))
         training = []
         xx = []
@@ -125,8 +124,15 @@ class TextPreparation:
         train_y = list(training[:, 1])
 
         # save all of our data structures
-        pickle.dump({'words': self.words, 'classes': self.classes, 'train_x': train_x, 'train_y': train_y},
-                    open(self.output_dir+"/training_data.pkl", "wb"))
+        pickle.dump(
+            {
+                'words': self.words,
+                'classes': self.classes,
+                'train_x': train_x,
+                'train_y': train_y,
+            },
+            open(f"{self.output_dir}/training_data.pkl", "wb"),
+        )
 
 
 def process_arguments(args):
@@ -137,8 +143,7 @@ def process_arguments(args):
     parser.add_argument('--filternums', default=False, type=bool, action='store', help='filter numbers')
     parser.add_argument('--num2words', default=False, type=bool, action='store', help='number to words')
     parser.add_argument('--stopwords', default=True, type=bool, action='store', help='use english stopwords')
-    params = vars(parser.parse_args(args))
-    return params
+    return vars(parser.parse_args(args))
 
 
 if __name__ == "__main__":

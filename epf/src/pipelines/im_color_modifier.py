@@ -38,7 +38,7 @@ class ColorModifier:
                     relative_p = os.path.relpath(fullpath, self.input_dir)
                     folders = os.path.split(relative_p)[0]
                     Path(os.path.join(self.output_dir, folders)).mkdir(parents=True, exist_ok=True)
-                    enhanced_im.save(os.path.join(self.output_dir, '{}_cm{}'.format(relative_p, extension)))
+                    enhanced_im.save(os.path.join(self.output_dir, f'{relative_p}_cm{extension}'))
         print("Color modifier done")
         return 1
 

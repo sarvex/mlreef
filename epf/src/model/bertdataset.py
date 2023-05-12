@@ -25,10 +25,10 @@ class SentimentDataset:
     def convert_to_embedding(self, sentence):
         tokens = self.tokenizer.tokenize(sentence)
         tokens = tokens[:MAX_SENTENCE_LENGTH - 2]
-        bert_sent = self._rpad(self.tokenizer.convert_tokens_to_ids(["[CLS]"] + tokens + ["[SEP]"]),
-                               n=MAX_SENTENCE_LENGTH)
-
-        return bert_sent
+        return self._rpad(
+            self.tokenizer.convert_tokens_to_ids(["[CLS]"] + tokens + ["[SEP]"]),
+            n=MAX_SENTENCE_LENGTH,
+        )
 
     def convert_data_to_embeddings(self, sentences_with_labels):
         for sentence, label in sentences_with_labels:
@@ -46,19 +46,16 @@ class SentimentDataset:
 
     @staticmethod
     def _read_imdb_data(filename):
-        data = []
-        for line in open(filename, 'r', encoding="utf-8"):
-            data.append(SentimentDataset._parse_imdb_line(line))
-
-        return data
+        return [
+            SentimentDataset._parse_imdb_line(line)
+            for line in open(filename, 'r', encoding="utf-8")
+        ]
 
     def prepare_dataloader_from_examples(self, examples, sampler=None):
         dataset = list(self.convert_data_to_embeddings(examples))
 
         sampler_func = sampler(dataset) if sampler is not None else None
-        dataloader = DataLoader(dataset, sampler=sampler_func, batch_size=BATCH_SIZE)
-
-        return dataloader
+        return DataLoader(dataset, sampler=sampler_func, batch_size=BATCH_SIZE)
 
     def prepare_dataloader(self, filename, sampler=None):
         data = self._read_imdb_data(filename)

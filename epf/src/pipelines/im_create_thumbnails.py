@@ -32,7 +32,7 @@ class Thumbnail:
                     im = Image.open(image)
                     ## HERE you can add other image operations and save them
                     im.thumbnail(self.size, Image.ANTIALIAS)
-                    im.save(os.path.join(self.output_dir, '{}_resized{}'.format(filename, extension)))
+                    im.save(os.path.join(self.output_dir, f'{filename}_resized{extension}'))
         print("Create thumbnail done")
         return 1
 

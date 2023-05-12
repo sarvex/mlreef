@@ -10,13 +10,14 @@ from pipelines.txt_ops import TextPreparation
 class Test(unittest.TestCase):
 
     def setUp(self):
-        params = {}
-        params['input_path'] = 'data/intents_test.json'
-        params['output_path'] = 'test_data'
-        params['stemmed'] = True
-        params['filternums'] = True
-        params['num2words'] = True
-        params['stopwords'] = True
+        params = {
+            'input_path': 'data/intents_test.json',
+            'output_path': 'test_data',
+            'stemmed': True,
+            'filternums': True,
+            'num2words': True,
+            'stopwords': True,
+        }
         self.tp = TextPreparation(params)
 
     def testParser(self):

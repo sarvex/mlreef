@@ -34,7 +34,12 @@ class AddNoise:
                     relative_p = os.path.relpath(fullpath, self.input_dir)
                     folders = os.path.split(relative_p)[0]
                     Path(os.path.join(self.output_dir, folders)).mkdir(parents=True, exist_ok=True)
-                    io.imsave(os.path.join(self.output_dir, '{}_noise{}'.format(relative_p, extension)), im_noisy.astype(np.uint8))
+                    io.imsave(
+                        os.path.join(
+                            self.output_dir, f'{relative_p}_noise{extension}'
+                        ),
+                        im_noisy.astype(np.uint8),
+                    )
         print("Add noise done")
         return 1
 

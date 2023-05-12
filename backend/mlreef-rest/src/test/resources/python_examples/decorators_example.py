@@ -32,21 +32,19 @@ class metric(object):
     def __init__(self, name):
         self.name = name
 
-    def recall_m(y_true, y_pred):
-        true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
-        possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
-        recall = true_positives / (possible_positives + K.epsilon())
-        return recall
+    def recall_m(self, y_pred):
+        true_positives = K.sum(K.round(K.clip(self * y_pred, 0, 1)))
+        possible_positives = K.sum(K.round(K.clip(self, 0, 1)))
+        return true_positives / (possible_positives + K.epsilon())
 
-    def precision_m(y_true, y_pred):
-        true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+    def precision_m(self, y_pred):
+        true_positives = K.sum(K.round(K.clip(self * y_pred, 0, 1)))
         predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
-        precision = true_positives / (predicted_positives + K.epsilon())
-        return precision
+        return true_positives / (predicted_positives + K.epsilon())
 
-    def f1_m(y_true, y_pred):
-        precision = precision_m(y_true, y_pred)
-        recall = recall_m(y_true, y_pred)
+    def f1_m(self, y_pred):
+        precision = precision_m(self, y_pred)
+        recall = recall_m(self, y_pred)
         return 2 * ((precision * recall) / (precision + recall + K.epsilon()))
 
     def __call__(self, f):
@@ -83,5 +81,5 @@ def mmlreef():
 
 mmlreef()
 
-print("Width = {} with type {}".format(width, type(width)))
-print("image_name = {} with type {}".format(image_name, type(image_name)))
+print(f"Width = {width} with type {type(width)}")
+print(f"image_name = {image_name} with type {type(image_name)}")

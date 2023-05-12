@@ -27,4 +27,3 @@ if __name__ == '__main__':
     init_parameters()
     color_mode = lambda: 'rbga' if channels == 4 else (
         'grayscale' if channels == 1 else 'rgb')  # handle this potential error
-    pass

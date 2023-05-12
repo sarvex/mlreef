@@ -59,8 +59,7 @@ def process_arguments(args):
     parser.add_argument('--max-acc', action='store',default=0.2, help='threshold of accuracy')
     parser.add_argument('--width', action='store', default=256, help='width of patches')
     parser.add_argument('--height', action='store', default=256, help='height of patches')
-    params = vars(parser.parse_args(args))
-    return params
+    return vars(parser.parse_args(args))
 
 
 if __name__ == '__main__':
@@ -170,7 +169,6 @@ if __name__ == '__main__':
                                     save: {'eopatch_folder': patch_name}
                                     })
         return list(results.values())[-1]
-        del results
 
 
     """Test workflow on an example patch and display"""
@@ -237,8 +235,7 @@ if __name__ == '__main__':
         w, m1, m2 = weight * weight, y_true, y_pred
         intersection = (m1 * m2)
         score = (2. * K.sum(w * intersection) + smooth) / (K.sum(w * m1) + K.sum(w * m2) + smooth)
-        loss = 1. - K.sum(score)
-        return loss
+        return 1. - K.sum(score)
 
 
     def weighted_bce_dice_loss(y_true, y_pred):
@@ -253,9 +250,9 @@ if __name__ == '__main__':
         weight += border * 2
         w1 = K.sum(weight)
         weight *= (w0 / w1)
-        loss = weighted_bce_loss(y_true, y_pred, weight) + \
-               weighted_dice_loss(y_true, y_pred, weight)
-        return loss
+        return weighted_bce_loss(y_true, y_pred, weight) + weighted_dice_loss(
+            y_true, y_pred, weight
+        )
 
 
     def unet(input_size):

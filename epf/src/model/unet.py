@@ -21,7 +21,7 @@ class Metrics(keras.callbacks.Callback):
     def on_train_begin(self, logs={}):
         self.metrics = {}
         self.metrics2 = {}
-        with open('{}/experiment.json'.format(output_path), 'w') as file:
+        with open(f'{output_path}/experiment.json', 'w') as file:
             json.dump(self.metrics, file)
     def on_batch_end(self, batch, logs={}):
         try:
@@ -29,7 +29,7 @@ class Metrics(keras.callbacks.Callback):
                 'acc': float(logs.get('acc')),
                 'loss': float(logs.get('loss')),
             }
-            with open('{}/experiment_batch_unet.json'.format(output_path), 'w') as file:
+            with open(f'{output_path}/experiment_batch_unet.json', 'w') as file:
                 json.dump(self.metrics2, file)
         except Exception as identifier:
             print("Error encountered: ", identifier)
@@ -43,7 +43,7 @@ class Metrics(keras.callbacks.Callback):
             'loss': logs.get('loss'),
             'val_loss': logs.get('val_loss')
         }
-        with open('{}/experiment_unet.json'.format(output_path), 'w') as file:
+        with open(f'{output_path}/experiment_unet.json', 'w') as file:
             json.dump(self.metrics, file)
         return None
 
@@ -166,16 +166,15 @@ def test_generator(test_path, num_image=30, target_size=(256, 256), flag_multi_c
         img = img / 255
         img = trans.resize(img, target_size)
         img = np.reshape(img, img.shape + (1,)) if (not flag_multi_class) else img
-        img = np.reshape(img, (1,) + img.shape)
-        yield img
+        yield np.reshape(img, (1,) + img.shape)
 
 
 def gen_train_npy(image_path, mask_path, flag_multi_class=False, num_class=2, image_prefix="image", mask_prefix="mask",
                   image_as_gray=True, mask_as_gray=True):
-    image_name_arr = glob.glob(os.path.join(image_path, "%s*.png" % image_prefix))
+    image_name_arr = glob.glob(os.path.join(image_path, f"{image_prefix}*.png"))
     image_arr = []
     mask_arr = []
-    for index, item in enumerate(image_name_arr):
+    for item in image_name_arr:
         img = io.imread(item, as_gray=image_as_gray)
         img = np.reshape(img, img.shape + (1,)) if image_as_gray else img
         mask = io.imread(item.replace(image_path, mask_path).replace(image_prefix, mask_prefix), as_gray=mask_as_gray)
@@ -216,8 +215,7 @@ def process_arguments(args):
                                                                                 ' (float)')
     parser.add_argument('--loss', action='store', default='binary_crossentropy', help='loss function used to '
                                                                                       'compile model')
-    params = vars(parser.parse_args(args))
-    return params
+    return vars(parser.parse_args(args))
 
 
 if __name__ == "__main__":
@@ -228,7 +226,6 @@ if __name__ == "__main__":
     output_path = params['output_path']
     height = int(params['height'])
     width = int(params['width'])
-    channels = int(params['channels'])
     use_pretrained = (params['use_pretrained'])
     epochs = int(params['epochs'])
     steps_per_epoch = int(params['steps_per_epoch'])
@@ -236,6 +233,7 @@ if __name__ == "__main__":
     class_mode = params['class_mode']
     learning_rate = float(params['learning_rate'])
     loss = params['loss']
+    channels = int(params['channels'])
     color_mode = lambda: 'rbga' if channels == 4 else (
         'grayscale' if channels == 1 else 'rgb')  # handle this potential error
 
@@ -246,6 +244,6 @@ if __name__ == "__main__":
     metric_logger = Metrics()
     keras_history = model.fit_generator(generator, steps_per_epoch=steps_per_epoch, epochs=epochs,
                                         callbacks=[metric_logger])
-    model.save_weights("{}/model_unet_{}_epochs_{}.h5".format(output_path, datetime.datetime.fromtimestamp(time.time()).
-                                                              strftime('%Y-%m-%d-%H:%M:%S'), epochs))
-pass
+    model.save_weights(
+        f"{output_path}/model_unet_{datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d-%H:%M:%S')}_epochs_{epochs}.h5"
+    )

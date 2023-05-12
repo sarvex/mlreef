@@ -17,7 +17,7 @@ class RandomCrop:
         self.seed = int(params['seed'])
 
         if type(self.seed) == str:
-            seed = int(self.seed)
+            seed = self.seed
 
         # create folder if does not exists
         if not os.path.exists(self.output_dir):
@@ -38,7 +38,12 @@ class RandomCrop:
                     relative_p = os.path.relpath(fullpath, self.input_dir)
                     folders = os.path.split(relative_p)[0]
                     Path(os.path.join(self.output_dir, folders)).mkdir(parents=True, exist_ok=True)
-                    cv2.imwrite(os.path.join(self.output_dir,'{}_cropped{}'.format(relative_p,extension)),image_cropped)
+                    cv2.imwrite(
+                        os.path.join(
+                            self.output_dir, f'{relative_p}_cropped{extension}'
+                        ),
+                        image_cropped,
+                    )
         print("Random Crop done")
         return 1
 
@@ -47,16 +52,13 @@ class RandomCrop:
         height, width, channels = image.shape
         max_x = width - self.width
         max_y = height - self.height
-        if max_x > 0 and max_y > 0:
-
-            x = random.randint(1, max_x)
-            y = random.randint(1, max_y)
-
-            crop = image[y: y + self.height, x: x + self.width, :]
-        else:
+        if max_x <= 0 or max_y <= 0:
             return image
 
-        return crop
+        x = random.randint(1, max_x)
+        y = random.randint(1, max_y)
+
+        return image[y: y + self.height, x: x + self.width, :]
 
 def process_arguments(args):
     parser = argparse.ArgumentParser(description='Pipeline: Random Crop')

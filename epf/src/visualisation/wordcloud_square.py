@@ -37,7 +37,7 @@ class MyWordCloud:
                     folders = os.path.split(relative_p)[0]
                     Path(os.path.join(self.output_dir, folders)).mkdir(parents=True, exist_ok=True)
                     image = wordcloud.to_image()
-                    image.save(os.path.join(self.output_dir, '{}_wordcloud{}'.format(relative_p, '.jpg')))
+                    image.save(os.path.join(self.output_dir, f'{relative_p}_wordcloud.jpg'))
         print("Wordcloud done")
         return 1
 

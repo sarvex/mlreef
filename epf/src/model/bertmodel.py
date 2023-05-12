@@ -31,8 +31,7 @@ class SentimentBERT:
         if self.model is None or self.tokenizer is None:
             self.load()
 
-        preds = self._predict_tags_batched(dataloader)
-        return preds
+        return self._predict_tags_batched(dataloader)
 
     def evaluate(self, dataloader):
         y_pred = self._predict_tags_batched(dataloader)
@@ -114,7 +113,9 @@ class SentimentBERT:
 
     def load(self, model_dir='weights/'):
         if not os.path.exists(model_dir):
-            raise FileNotFoundError("folder `{}` does not exist. Please make sure weights are there.".format(model_dir))
+            raise FileNotFoundError(
+                f"folder `{model_dir}` does not exist. Please make sure weights are there."
+            )
 
         self.tokenizer = BertTokenizer.from_pretrained(model_dir)
         self.model = BertForSequenceClassification.from_pretrained(model_dir)

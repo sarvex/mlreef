@@ -31,7 +31,12 @@ class Rotate:
                     relative_p = os.path.relpath(fullpath, self.input_dir)
                     folders = os.path.split(relative_p)[0]
                     Path(os.path.join(self.output_dir, folders)).mkdir(parents=True, exist_ok=True)
-                    cv2.imwrite(os.path.join(self.output_dir, '{}_rotated{}'.format(relative_p, extension)), image_rotated)
+                    cv2.imwrite(
+                        os.path.join(
+                            self.output_dir, f'{relative_p}_rotated{extension}'
+                        ),
+                        image_rotated,
+                    )
         print("Rotating done")
         return 1
 
@@ -41,8 +46,7 @@ def process_arguments(args):
     parser.add_argument('--input-path', action='store', help='path to directory of images')
     parser.add_argument('--output-path', action='store', help='output path to save images')
     parser.add_argument('--angle', default=30, action='store', help='angle of rotation')
-    params = vars(parser.parse_args(args))
-    return params
+    return vars(parser.parse_args(args))
 
 
 if __name__ == "__main__":

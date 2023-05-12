@@ -25,13 +25,15 @@ def inject_variables():
 
 
 def run(epochs, batch_size):
-    print("Emulate dummy-dataprocessor with epochs={} and batch_size={}".format(epochs,batch_size))
+    print(
+        f"Emulate dummy-dataprocessor with epochs={epochs} and batch_size={batch_size}"
+    )
     experiment_dict = {}
     for i in range(epochs):
         epoch = i+1
 
         experiment_dict[f"{epoch}"] = new_dict_entry(epoch,epochs)
-        print("Epoch #{} of {}".format(epoch,epochs))
+        print(f"Epoch #{epoch} of {epochs}")
 
         sleep(batch_size)
         print( experiment_dict)
@@ -40,20 +42,19 @@ def run(epochs, batch_size):
 
 
 def sleep(batch_size):
-    print("Sleep for {}".format(batch_size))
+    print(f"Sleep for {batch_size}")
     time.sleep(batch_size)
     return True
 
 
 def new_dict_entry(epoch,epochs):
     acc = 0.99 * (epoch / epochs)
-    dict_to_log = {
+    return {
         "acc": acc,
-        "val_acc": acc-0.1,
+        "val_acc": acc - 0.1,
         "loss": 3.0 - acc,
-        "val_loss": 3.0 - acc
+        "val_loss": 3.0 - acc,
     }
-    return dict_to_log
 
 
 def log_json_end(experiment_dict):

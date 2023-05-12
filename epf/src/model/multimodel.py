@@ -99,7 +99,7 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25, is_ince
     best_acc = 0.0
 
     for epoch in range(num_epochs):
-        print('Epoch {}/{}'.format(epoch, num_epochs - 1))
+        print(f'Epoch {epoch}/{num_epochs - 1}')
         print('-' * 10)
 
         # Each epoch has a training and validation phase
@@ -276,7 +276,7 @@ class MultiModel:
         model_ft, hist = train_model(self.model_ft, self.dataloaders_dict, criterion, optimizer_ft, num_epochs=self.epochs,
                                      is_inception=(self.model_name == "inception"))
 
-        torch.save(model_ft, self.output_dir+'/model_style11.pth')
+        torch.save(model_ft, f'{self.output_dir}/model_style11.pth')
 
 
 def process_arguments(args):
@@ -294,8 +294,7 @@ def process_arguments(args):
                                                                                              'to extract features '
                                                                                              'false for '
                                                                                              'classification')
-    params = vars(parser.parse_args(args))
-    return params
+    return vars(parser.parse_args(args))
 
 
 if __name__ == "__main__":

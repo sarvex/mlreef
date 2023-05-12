@@ -18,26 +18,26 @@ from pipelines.im_add_noise import AddNoise
 class Test(unittest.TestCase):
 
     def setUp(self):
-        params = {}
-        params['input_path'] = 'data'
-        params['output_path'] = 'test_data'
-        params['size'] = 64
-        params['intensity'] = 5
-        params['seed'] = 5
-        params['height'] = 64
-        params['width'] = 64
-        params['angle'] = 30
-        params['rotation']= 60
-        params['shear']= 5
-        params['prob'] = 1.0
-        params['ratio'] = 1.0
-        params['scale_min'] = 0.1
-        params['scale_max'] = 0.2
-        params['brightness'] = 1.0
-        params['contrast'] = 1.0
-        params['saturation']= 2.0
-        params['mode']='gaussian'
-
+        params = {
+            'input_path': 'data',
+            'output_path': 'test_data',
+            'size': 64,
+            'intensity': 5,
+            'seed': 5,
+            'height': 64,
+            'width': 64,
+            'angle': 30,
+            'rotation': 60,
+            'shear': 5,
+            'prob': 1.0,
+            'ratio': 1.0,
+            'scale_min': 0.1,
+            'scale_max': 0.2,
+            'brightness': 1.0,
+            'contrast': 1.0,
+            'saturation': 2.0,
+            'mode': 'gaussian',
+        }
         self.tb = Thumbnail(params)
         self.lf = LeeFilter(params)
         self.rc = RandomCrop(params)

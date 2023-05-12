@@ -22,7 +22,7 @@ class Metrics(keras.callbacks.Callback):
     def on_train_begin(self, logs={}):
         self.metrics = {}
         self.metrics2 = {}
-        with open('{}/experiment.json'.format(output_path), 'w') as file:
+        with open(f'{output_path}/experiment.json', 'w') as file:
             json.dump(self.metrics, file)
 
     def on_batch_end(self, batch, logs={}):
@@ -31,7 +31,7 @@ class Metrics(keras.callbacks.Callback):
                 'acc': float(logs.get('acc')),
                 'loss': float(logs.get('loss')),
             }
-            with open('{}/experiment_batch.json'.format(output_path), 'w') as file:
+            with open(f'{output_path}/experiment_batch.json', 'w') as file:
                 json.dump(self.metrics2, file)
         except Exception as identifier:
             print("Error encountered: ", identifier)
@@ -45,7 +45,7 @@ class Metrics(keras.callbacks.Callback):
             'loss': float(logs.get('loss')),
             'val_loss': float(logs.get('val_loss'))
         }
-        with open('{}/experiment.json'.format(output_path), 'w') as file:
+        with open(f'{output_path}/experiment.json', 'w') as file:
             json.dump(self.metrics, file)
         return None
 
@@ -86,7 +86,7 @@ def resnet_model(height, width, channels, color_mode, use_pretrained, trainGener
     if use_pretrained == 'True':
         url = 'https://github.com/fchollet/deep-learning-models/releases/download/v0.2/resnet50_weights_tf_dim_ordering' \
               '_tf_kernels_notop.h5'
-        os.system("wget -c --read-timeout=5 --tries=0 {}".format(url))
+        os.system(f"wget -c --read-timeout=5 --tries=0 {url}")
         print("Using pre-trained ResNet model \n")
         base_model = ResNet50(weights='resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5',
                               include_top=False,
@@ -175,15 +175,14 @@ def process_arguments(args):
                              '')
     parser.add_argument('--loss', action='store', default='sparse_categorical_crossentropy', help='loss function used to'
                                                                                            ' compile model')
-    params = vars(parser.parse_args(args))
-    return params
+    return vars(parser.parse_args(args))
 
 
 if __name__ == '__main__':
     params = process_arguments(sys.argv[1:])
     images_path = params['input_path']
     output_path = params['output_path']
-    
+
     if not os.path.exists(output_path):
         os.makedirs(output_path)
 
@@ -207,5 +206,3 @@ if __name__ == '__main__':
     print("\n")
     model, _, history = resnet_model(height, width, channels, color_mode, use_pretrained, trainGenerator,
                                     validationGenerator, loss, epochs, learning_rate)
-
-    pass

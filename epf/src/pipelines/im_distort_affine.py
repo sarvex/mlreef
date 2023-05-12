@@ -34,7 +34,12 @@ class DistortAffine:
                     relative_p = os.path.relpath(fullpath, self.input_dir)
                     folders = os.path.split(relative_p)[0]
                     Path(os.path.join(self.output_dir, folders)).mkdir(parents=True, exist_ok=True)
-                    io.imsave(os.path.join(self.output_dir, '{}_dstr{}'.format(relative_p, extension)), im_distorted)
+                    io.imsave(
+                        os.path.join(
+                            self.output_dir, f'{relative_p}_dstr{extension}'
+                        ),
+                        im_distorted,
+                    )
         print("Affine Distort done")
         return 1
 
@@ -65,8 +70,7 @@ def process_arguments(args):
     parser.add_argument('--rotation', action='store', type=float, default=60, help='Angle of rotation')
     parser.add_argument('--shear', action='store', type=float, default=5.0, help='Shear')
 
-    params = vars(parser.parse_args(args))
-    return params
+    return vars(parser.parse_args(args))
 
 
 if __name__ == "__main__":

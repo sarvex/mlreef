@@ -32,14 +32,14 @@ def data_flow(images_path, training_split, validation_split, class_mode):
     )
     DIR = images_path
     num_images = len([name for name in os.listdir(DIR) if os.path.isfile(os.path.join(DIR, name))])
-    os.makedirs(DIR + 'test_temp_dir/')
+    os.makedirs(f'{DIR}test_temp_dir/')
     images = os.listdir(DIR)
     num_file_to_move = num_images - num_images * training_split
 
     for index, file in enumerate(images):
         if index == num_file_to_move:
             break
-        shutil.copy(DIR + file, DIR + 'test/')
+        shutil.copy(DIR + file, f'{DIR}test/')
 
     # TODO: Delete the extra files and folder after training
 
@@ -54,13 +54,13 @@ def data_flow(images_path, training_split, validation_split, class_mode):
     )
 
     testing_generator = data_generator.flow_from_directory(
-        directory=DIR + 'test_temp_dir/',
+        directory=f'{DIR}test_temp_dir/',
         target_size=(height, width),
         color_mode=color_mode(),
         batch_size=batch_size,
         class_mode=class_mode,
         shuffle=True,
-        subset='testing'
+        subset='testing',
     )
     return train_generator, testing_generator, validation_generator
 
@@ -96,7 +96,7 @@ def resnet_model(height, width, channels, color_mode, use_pretrained, trainGener
     if use_pretrained == 'True':
         url = 'https://github.com/fchollet/deep-learning-models/releases/download/v0.2/resnet50_weights_tf_dim_ordering' \
               '_tf_kernels_notop.h5'
-        os.system("wget -c --read-timeout=5 --tries=0 {}".format(url))
+        os.system(f"wget -c --read-timeout=5 --tries=0 {url}")
         print("Using pre-trained ResNet model \n")
         base_model = ResNet50(weights='resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5',
                               include_top=False,

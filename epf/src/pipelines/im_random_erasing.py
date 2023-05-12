@@ -38,7 +38,12 @@ class RandomErasing:
                     relative_p = os.path.relpath(fullpath, self.input_dir)
                     folders = os.path.split(relative_p)[0]
                     Path(os.path.join(self.output_dir, folders)).mkdir(parents=True, exist_ok=True)
-                    cv2.imwrite(os.path.join(self.output_dir, '{}_re{}'.format(relative_p, extension)), image_erased)
+                    cv2.imwrite(
+                        os.path.join(
+                            self.output_dir, f'{relative_p}_re{extension}'
+                        ),
+                        image_erased,
+                    )
 
         print("Random Erasing done")
         return 1
@@ -48,7 +53,7 @@ class RandomErasing:
         if random.uniform(0, 1) > self.probability:
             return img
 
-        for attempt in range(100):
+        for _ in range(100):
             area = height * width
 
             target_area = random.uniform(self.sl, self.sh) * area
@@ -60,12 +65,10 @@ class RandomErasing:
             if w < width and h < height:
                 x1 = random.randint(0, height - h)
                 y1 = random.randint(0, width - w)
+                img[x1:x1 + h, y1:y1 + w, 0] = self.mean[0]
                 if channels == 3:
-                    img[x1:x1 + h, y1:y1 + w, 0] = self.mean[0]
                     img[x1:x1 + h, y1:y1 + w, 1] = self.mean[1]
                     img[x1:x1 + h, y1:y1 + w, 2] = self.mean[2]
-                else:
-                    img[x1:x1 + h, y1:y1 + w, 0] = self.mean[0]
                 return img
 
         return img

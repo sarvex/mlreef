@@ -79,7 +79,7 @@ def run_tsne(input_path, output_path, tsne_dimensions, tsne_perplexity, tsne_lea
         data.append({"path":os.path.abspath(join(input_path,images[i])), "point":point})
     with open(os.path.join(output_path,'tsne_out.json'), 'w') as outfile:
         json.dump(data, outfile)
-    
+
     tx, ty = tsne[:,0], tsne[:,1]
     tx = (tx-np.min(tx)) / (np.max(tx) - np.min(tx))
     ty = (ty-np.min(ty)) / (np.max(ty) - np.min(ty))
@@ -95,7 +95,7 @@ def run_tsne(input_path, output_path, tsne_dimensions, tsne_perplexity, tsne_lea
         full_image.paste(tile, (int((width-max_dim)*x), int((height-max_dim)*y)), mask=tile.convert('RGBA'))
 
     matplotlib.pyplot.figure(figsize = (16,12))
-    full_image.save(os.path.join(output_path,"tsne_plot_{}.png".format(tsne_perplexity)))
+    full_image.save(os.path.join(output_path, f"tsne_plot_{tsne_perplexity}.png"))
     print("Image saved")
 
 def process_arguments(args):
@@ -107,8 +107,7 @@ def process_arguments(args):
     parser.add_argument('--perplexity', action='store', default=30, help='perplexity of t-SNE (default 30)')
     parser.add_argument('--learning-rate', action='store', default=100, help='learning rate of t-SNE (default 150)')
     parser.add_argument('--max-iter', action='store',type=int, default=1000, help='maximum number of iterations for the optimization (default 1000)')
-    params = vars(parser.parse_args(args))
-    return params
+    return vars(parser.parse_args(args))
 
 
 if __name__ == '__main__':
@@ -123,4 +122,4 @@ if __name__ == '__main__':
     tsne_learning_rate = int(params['learning_rate'])
     tsne_max_iter = int(params['max_iter'])
     run_tsne(input_path, output_path, tsne_dimensions, tsne_perplexity, tsne_learning_rate,tsne_max_iter)
-print("finished saving %s" % output_path)
+print(f"finished saving {output_path}")

@@ -33,7 +33,7 @@ class Model:
         model = tflearn.DNN(net, tensorboard_dir='tflearn_logs')
         # Start training (apply gradient descent algorithm)
         model.fit(self.train_x, self.train_y, n_epoch=self.epochs, batch_size=self.batch_size, show_metric=True)
-        model.save(self.output_dir + 'model.tflearn')
+        model.save(f'{self.output_dir}model.tflearn')
 
 
 def process_arguments(args):
@@ -43,8 +43,7 @@ def process_arguments(args):
     parser.add_argument('--learning-rate', default=0.01, type=float, action='store', help='learning rate')
     parser.add_argument('--batch-size', default=8, type=int, action='store', help='batch size')
     parser.add_argument('--epochs', default=400, type=int, action='store', help='epochs')
-    params = vars(parser.parse_args(args))
-    return params
+    return vars(parser.parse_args(args))
 
 
 if __name__ == "__main__":

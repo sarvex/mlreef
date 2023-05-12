@@ -16,13 +16,13 @@ def augment():
             fill_mode='nearest')
 
     if os.path.isfile(input):
-        path = '/'.join(input.split('/')[0:-1])
+        path = '/'.join(input.split('/')[:-1])
         image = imread(input)  # this is a PIL image
-        image_array = img_to_array(image) 
+        image_array = img_to_array(image)
         image_array = image_array.reshape((1,) + image_array.shape)  
 
         iterator = 0
-        for batch in datagen.flow(image_array, batch_size=1, save_to_dir = output, save_prefix='augment', save_format='png'):
+        for _ in datagen.flow(image_array, batch_size=1, save_to_dir = output, save_prefix='augment', save_format='png'):
             iterator += 1
             if iterator > iterations:
                 break  # otherwise the generator would loop indefinitely
@@ -32,18 +32,16 @@ def augment():
             for file in files:
                 try:
                     image = imread(os.path.join(subdir,file))
-                    image_array = img_to_array(image)  
+                    image_array = img_to_array(image)
                     image_array = image_array.reshape((1,) + image_array.shape) 
 
                     iterator = 0
-                    for batch in datagen.flow(image_array, batch_size=1, save_to_dir=output_path, save_prefix='augment', save_format='png'):
+                    for _ in datagen.flow(image_array, batch_size=1, save_to_dir=output_path, save_prefix='augment', save_format='png'):
                         iterator += 1
                         if iterator >= iterations:
                             break  # otherwise the generator would loop indefinitely
                 except Exception as identifier:
                     print("Error:", identifier)
-                    pass
-            
     return None
 
 def process_arguments(args):
@@ -58,18 +56,16 @@ def process_arguments(args):
     parser.add_argument('--zoom-range', action='store', default=0, help='range for random zoom (float)')
     parser.add_argument('--horizontal-flip', action='store', default=False, help='randomly flip inputs horizontally (boolean)')
     parser.add_argument('--vertical-flip', action='store', default=False, help='Randomly flip inputs vertically (boolean)')
-    params = vars(parser.parse_args(args))
-    return params
+    return vars(parser.parse_args(args))
 
 
 if __name__ == "__main__":
 
-    print("Beginning execution of augment.py script ......... \n")    
+    print("Beginning execution of augment.py script ......... \n")
     params = process_arguments(sys.argv[1:])
     print("Parameters input are: ",params)
     input = params['input_path']
     output_path= params['output_path']
-     # create folder if does not exists
     if not os.path.exists(output_path):
         os.makedirs(output_path)
     iterations = int(params['iterations'])
@@ -83,4 +79,3 @@ if __name__ == "__main__":
 
     augment()
     print("Augmenting done")
-    pass
