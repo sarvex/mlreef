@@ -19,7 +19,7 @@
     "dayjs": "^1.10.4",
     "dompurify": "^2.0.8",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1",
+    "express": "^4.19.2",
     "file-saver": "^2.0.2",
     "formik": "^2.1.4",
     "history": "^4.10.1",
